@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+	KeyboardAvoidingView,
 	StyleSheet,
 	View,
 	Text,
@@ -7,7 +8,7 @@ import {
 	TouchableOpacity,
 } from "react-native";
 // import { Icon } from "native-base";
-import { CiCircleCheck } from "react-icons/ci";
+import { AntDesign } from "@expo/vector-icons";
 
 const HomeScreen = () => {
 	const [todos, setTodos] = useState([]);
@@ -35,9 +36,6 @@ const HomeScreen = () => {
 	const renderTodo = (todo, index) => {
 		return (
 			<View key={index} style={styles.todo}>
-				<TouchableOpacity onPress={() => toggleTodo(index)}>
-					<CiCircleCheck />
-				</TouchableOpacity>
 				<Text
 					style={{
 						textDecorationLine: todo.completed
@@ -46,28 +44,39 @@ const HomeScreen = () => {
 					}}>
 					{todo.title}
 				</Text>
-				<TouchableOpacity onPress={() => deleteTodo(index)}>
-					<CiCircleCheck />
-				</TouchableOpacity>
+				<View style={styles.btnContainer}>
+					<TouchableOpacity onPress={() => toggleTodo(index)}>
+						<AntDesign name='check' size={24} color='black' />
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => deleteTodo(index)}>
+						<AntDesign name='close' size={24} color='black' />
+					</TouchableOpacity>
+				</View>
 			</View>
 		);
 	};
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.inputContainer}>
-				<TextInput
-					style={styles.input}
-					placeholder='Add a todo'
-					value={inputValue}
-					onChangeText={(text) => setInputValue(text)}
-				/>
-				<TouchableOpacity onPress={addTodo}>
-					<CiCircleCheck />
-				</TouchableOpacity>
+		<KeyboardAvoidingView
+			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			style={styles.container}>
+			<View style={styles.container}>
+				<View style={styles.todosContainer}>
+					{todos.map(renderTodo)}
+				</View>
+				<View style={styles.inputContainer}>
+					<TextInput
+						style={styles.input}
+						placeholder='Add a todo'
+						value={inputValue}
+						onChangeText={(text) => setInputValue(text)}
+					/>
+					<TouchableOpacity onPress={addTodo}>
+						<AntDesign name='plus' size={24} color='black' />
+					</TouchableOpacity>
+				</View>
 			</View>
-			<View style={styles.todosContainer}>{todos.map(renderTodo)}</View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 
@@ -76,12 +85,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#fff",
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "flex-end",
 	},
 	inputContainer: {
 		flexDirection: "row",
 		alignItems: "center",
 		marginBottom: 20,
+		backgroundColor: "lightgreen",
 	},
 	input: {
 		borderWidth: 1,
@@ -93,13 +103,18 @@ const styles = StyleSheet.create({
 	},
 	todosContainer: {
 		width: "100%",
+		backgroundColor: "lightblue",
 	},
 	todo: {
 		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "space-between",
 		padding: 10,
 		borderBottomWidth: 1,
 		borderBottomColor: "gray",
+	},
+	btnContainer: {
+		flexDirection: "row",
 	},
 });
 

@@ -1,11 +1,14 @@
 import React, { useEffect, useReducer } from "react";
 import { StyleSheet, View, Text, LogBox } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 // import { Icon, NativeBaseProvider } from "native-base";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from "./src/pages/HomeScreen";
 import EditScreen from "./src/pages/EditScreen";
+
+import { AntDesign } from "@expo/vector-icons";
 
 LogBox.ignoreLogs([
 	"Non-serializable values were found in the navigation state",
@@ -66,7 +69,7 @@ const App = () => {
 	}, [todos]);
 
 	return (
-		// <NativeBaseProvider>
+		// <SafeAreaView>
 		<View style={styles.container}>
 			<NavigationContainer>
 				<Stack.Navigator>
@@ -75,7 +78,13 @@ const App = () => {
 						component={HomeScreen}
 						options={({ navigation }) => ({
 							title: "Todo List",
-							headerRight: () => <Text>V</Text>,
+							headerRight: () => (
+								<AntDesign
+									name='check'
+									size={24}
+									color='black'
+								/>
+							),
 						})}
 						initialParams={{ todos, dispatch }}
 					/>
@@ -83,14 +92,14 @@ const App = () => {
 				</Stack.Navigator>
 			</NavigationContainer>
 		</View>
-		// </NativeBaseProvider>
+		// </SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
+		backgroundColor: "lightpink",
 		padding: 15,
 	},
 });
